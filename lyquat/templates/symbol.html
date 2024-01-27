@@ -1,0 +1,557 @@
+{% extends "base.html" %}
+{% block title %}{{ company.name}}{% endblock %}
+{% block head %}
+  <script language="javascript" type="text/javascript" src="{{url_for('js', symbol=symbol )}}"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/highcharts-more.js"></script>
+  <script src="https://code.highcharts.com/modules/series-label.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+  <script src="https://code.highcharts.com/modules/draggable-points.js"></script>
+  <script src="https://code.highcharts.com/modules/dumbbell.js"></script>
+  <script type="text/javascript">
+
+   document.addEventListener('DOMContentLoaded', (e) => {
+
+    $("#myTable td").click(function(e){
+      var target = e.target;
+      var value = target.innerHTML;
+      var clean = parseFloat(value.replace(',','').replace('$',''));
+      $("#cf").val(clean);
+      calculate();
+    });
+
+    $("#dcf input").focusout(function(){
+      calculate();
+    });
+    $("#dcf input").change(function(){
+      calculate();
+    });
+    $('#search').click(function(e){
+        s = $('#symbol').val().toUpperCase();
+        const target = location.protocol + '//' + location.host + '/' + s;
+        window.location.assign(target);
+    });
+
+    Highcharts.chart('price_chart', {
+      title: false,
+      exporting: false,
+      chart: {
+        type: 'line',
+        zoomType: 'x'
+      },
+      xAxis: {
+        type: 'datetime',
+        crosshair: true,
+        zoomEnabled: false,
+        title: { text: 'Week Ending' }
+      },
+      yAxis: [
+        {
+          title: { text: 'Price' }
+        },
+        {
+          title: { text: 'Price' },
+          opposite: true
+        }
+      ],
+      allowPointSelect: true,
+      plotOptions: {
+        series: {
+          allowPointSelect: false,
+          dragDrop: {
+            draggableX: false,
+            draggableY: false
+          },
+          tooltip: {
+            headerFormat: '<b>$ {point.y}</b><br>',
+            pointFormatter: function() {
+                return Highcharts.dateFormat('%Y-%m-%d', this.x)
+            }
+          }
+        }
+      },
+      series: [{
+        color: 'rgba(119, 187, 243, 0.81)',
+        name: '{{ company_name }} Price',
+        label: {enabled: false},
+        pointStart: chart.min_x,
+        pointInterval: 7 * 24 * 3600 * 1000, // one month
+        data: chart.y, yAxis: 1
+      }]
+    });
+
+  Highcharts.chart('earnings', {
+          title: {text: '{{company_name}}' },
+          exporting: false,
+          chart: {
+              type: 'scatter',
+              zoomType: 'xy'
+          },
+          xAxis: {
+              type: 'datetime',
+              gridLineWidth: 1
+          },
+          yAxis: {
+              title: {
+                  text: 'Earnings per share (EPS)'
+              },
+              gridLineWidth: 0,
+              plotLines: [{
+                color: 'grey',
+                width: 2,
+                value: 0,
+                zIndex: 5
+              }]
+          },
+          legend: {
+              layout: 'vertical',
+              align: 'left',
+              verticalAlign: 'top',
+              x: 100,
+              y: 70,
+              floating: true,
+              backgroundColor: Highcharts.defaultOptions.chart.backgroundColor,
+              borderWidth: 1
+          },
+          plotOptions: {
+              scatter: {
+                  marker: {
+                      radius: 5,
+                      states: {
+                          hover: {
+                              enabled: true,
+                              lineColor: 'rgb(100,100,100)'
+                          }
+                      }
+                  },
+                  states: {
+                      hover: {
+                          marker: {
+                              enabled: false
+                          }
+                      }
+                  },
+                  tooltip: {
+                      headerFormat: '<b>EPS: $ {point.y}</b><br>',
+                      pointFormatter: function() {
+                          return Highcharts.dateFormat('%Y-%m-%d', this.x)
+                      }
+
+                  }
+              }
+          },
+          series: [
+        {
+              name: 'Estimated EPS',
+              color: 'rgba(243, 184, 177, 0.81)',
+              data: earnings_estimates,
+              marker: {
+                // fillColor: '#FFFFFF',
+                enabled: true,
+                symbol: 'circle',
+                radius: 10,
+              }
+          }, 
+          {
+              name: 'Reported EPS',
+              color: 'rgba(243, 100, 95, 0.81)',
+              data: earnings_actuals,
+              marker: {
+                enabled: true,
+                symbol: 'circle',
+                radius: 7
+              }
+          }, {
+              name: 'Forecast EPS',
+              color: 'rgba(119, 187, 243, 0.81)',
+              data: earnings_forecasts,
+              marker: {
+                enabled: true,
+                symbol: 'circle',
+                radius: 10
+              }
+            }
+          ]
+      });
+	  Highcharts.chart('shares_chart', {
+	      exporting: false,
+	      title: false,
+	      chart: {
+	        type: 'line'
+	      },
+	      xAxis: {
+	        type: 'datetime'
+	      },
+	      series: [{
+	        data: shares,
+	        name: 'Shares Outstanding',
+	        label: {enabled: false}
+	      }]
+	    });
+
+	  	Highcharts.chart('dumbbell_chart', {
+	      title: false,
+	      exporting: false,
+	      chart: {
+	            type: 'dumbbell',
+	            inverted: false
+	      },
+	      xAxis: {
+	        type: 'datetime'
+	      },
+	      yAxis: {
+	        title: { text: 'Price' }
+	      },
+	      series: [{
+	        name: '12 Month Price Changes',
+	        data: ytd,
+	        label: {enabled: false}
+	      }]
+	    });
+	 Highcharts.chart('balance_sheet', {
+      title: false,
+      exporting: false,
+      chart: { type: 'line' },
+      xAxis: {
+        type: 'datetime'
+      },
+      plotOptions: {
+        column: {
+          grouping: false,
+          shadow: false,
+          borderWidth: 0
+        }
+      },
+      series: [
+      {
+        name: 'Total Assets',
+        data: balance_sheet.total_assets,
+        pointPadding: 0.3,
+        pointPlacement: -0.2
+      },
+      {
+        name: 'Cash',
+        data: balance_sheet.total_cash,
+        pointPadding: 0.4,
+        pointPlacement: -0.2
+      },
+      {
+        name: 'Total Liabilities',
+        data: balance_sheet.total_liabilities,
+        pointPadding: 0.3,
+        pointPlacement: 0.2,
+        color: 'rgba(166, 131, 27, 0.67)'
+      },
+      {
+        name: 'Long Term Debt',
+        data: balance_sheet.total_long_term_debt,
+        pointPadding: 0.4,
+        pointPlacement: 0.2,
+        color: 'rgba(204, 75, 43, 0.67)'
+      }]
+    });
+	 Highcharts.chart('income_statement', {
+      title: false,
+      exporting: false,
+      chart: { type: 'column', zoomType: 'xy'},
+      xAxis: {
+        type: 'datetime'
+      },
+      plotOptions: {
+    column: {
+      grouping: false,
+      shadow: false,
+      borderWidth: 0
+    }
+  },
+      series: [
+      {
+        name: 'Revenue',
+        data: income_statement.total_revenues,
+        pointPadding: 0.3,
+        pointPlacement: -0.2
+      },
+      {
+        name: 'Cost of Revenues',
+        data: income_statement.total_cost_of_revenues,
+        pointPadding: 0.4,
+        pointPlacement: -0.2
+      },
+      {
+        name: 'Gross Profit',
+        data: income_statement.total_gross_profit,
+        pointPadding: 0.3,
+        pointPlacement: 0.1,
+        color: 'rgba(120, 103, 51, 0.67)'
+      },
+      {
+        name: 'SGA',
+        data: income_statement.total_sga,
+        pointPadding: 0.4,
+        pointPlacement: 0.1,
+        color: '#ED8686'
+      },
+      {
+        name: 'Income Taxes',
+        data: income_statement.total_income_taxes,
+        pointPadding: 0.4,
+        pointPlacement: 0.1,
+        color: 'rgba(253, 208, 71, 0.67)'
+      },
+      {
+        name: 'Depreciation & Amorts',
+        data: income_statement.total_depreciation,
+        pointPadding: 0.4,
+        pointPlacement: 0.1,
+        color: 'rgba(178, 177, 173, 0.67)'
+      },
+      {
+        name: 'Net Income',
+        data: income_statement.total_net_income,
+        pointPadding: 0.3,
+        pointPlacement: 0.4,
+        color: 'rgba(29, 181, 48, 0.67)'
+      }
+      ]
+    });
+	 });
+  </script>
+{% endblock %}
+{% block content %}
+<table>
+  <thead>
+        <tr class="center">
+          <th class="smaller">Sector: <a href="{{ url_for('snapshot_by_sector', sectorid=company.sectorid) }}">{{ company.sector | title }}</a></th>
+        </tr>
+        <tr class="center">
+          <th><a href="{{ url_for('list_industry', industry=company.industry_id)}}">{{ company.industry | title }}</a></th>
+        </tr>
+    </thead>
+</table> 
+{% endblock %}
+{% block overview %}
+<table class="symbol-header">
+  <tr><td class="center bold">{{ company.name }} - {{ company.market_cap | human_format }}</td></tr>
+  <tr><td class="center smaller-text">(valued in millions of USD)</td></tr>
+  <tr><td class="center"><a target="_blank" href="{{ supps.website }}"><img class="symbol-header-img" src="{{ supps.logo_url }}"/></a></td></tr>
+</table>
+<p/>
+<hr/>
+{% endblock %}
+{% block graphics %}
+	<div class="graphics flex-column">
+		<div id="price_chart"></div>
+		<div id="earnings"></div>
+	</div>
+	<div class="graphics flex-row">
+		<div id="shares_chart" class="half"></div>
+		<div id="dumbbell_chart" class="half"></div>
+	</div>
+	<div class="graphics flex-column">
+		<div id="balance_sheet"></div>
+		<div id="income_statement"></div>
+	</div>
+
+{% endblock %}
+{% block balance_sheet %}
+<div id="sector_panels">
+      <div class="fin_title" name="balance_sheet"><a href="#fin_balance_sheet">Balance Sheet</a></div>
+      <div class="fin_title" name="income_statement"><a href="#fin_income_statement">Income Statement</a></div>
+      <div class="fin_title" name="cashflow_statement"><a href="#fin_cashflows">Statement of Cashflows</a></div>
+      <div class="fin_title" name="valuations"><a href="#dcf">DCF Estimate Calculator</a></div>
+    </div>
+    <h4 id="fin_balance_sheet">Balance Sheet</h4>
+    <div class="smaller">In thousands, including share information</div>
+ <div class="scroll-container">
+    <div class="scrollable">
+      <table class="financials show">
+        <thead>
+          <th class="sticky">Description</th>
+          {% for p in balance_sheet_periods %}
+            <th class="nowrap">{{ p }}</th>
+          {% endfor %}
+        </thead>
+        <tbody>
+            <tr>
+              <td class="sticky smaller-no-padding">Reported Currency</td>
+              {% for c in balance_sheet_currencies %}
+                <td class="center-td smaller-no-padding">
+                <img alt="{{ company.country}}" class="flag" src="{{  url_for('static', filename='images/' + c | country + '.png') }}"/></td>
+              {% endfor %}
+            </tr>
+            {% for foo in balance_sheet_keys %}
+            <tr>
+              <td class="nowrap sticky smaller-no-padding order-{{ foo.order }}">{{ foo.key | from_camelcase | title}}</td>
+                {% set rowloop = loop %}
+              {% for x in balance_sheet_data %}
+                <td class="0">{{ x[rowloop.index0] | thousands }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+   </div>
+    <br/>
+{% endblock %}
+{% block income_statement %}
+<hr/>
+	<h4 id="fin_income_statement">Income Statement</h4>
+    <div class="smaller">In thousands, including share information</div>
+   <div class="scroll-container">
+    <div class="scrollable">
+      <table class="financials show">
+        <thead>
+          <th class="sticky">Description</th>
+          {% for p in income_statement_periods %}
+            <th class="nowrap">{{ p }}</th>
+          {% endfor %}
+        </thead>
+        <tbody>
+            <tr>
+              <td class="sticky smaller-no-padding">Reported Currency</td>
+              {% for c in income_statement_currencies %}
+                <td class="center-td smaller-no-padding">
+                <img alt="{{ company.country}}" class="flag" src="{{  url_for('static', filename='images/' + c | country + '.png') }}"/></td>
+              {% endfor %}
+            </tr>
+            {% for foo in income_statement_keys %}
+            <tr>
+              <td class="nowrap sticky smaller-no-padding order-{{ foo.order }}">{{ foo.key | from_camelcase | title}}</td>
+                {% set rowloop = loop %}
+              {% for x in income_statement_data %}
+                <td class="0">{{ x[rowloop.index0] | thousands }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+   </div>
+    <br/>
+{% endblock %}
+{% block cashflows %}
+<hr/>
+	<h4 id="fin_cashflows">Cashflows</h4>
+    <div class="smaller">In thousands, including share information</div>
+   <div class="scroll-container">
+    <div class="scrollable">
+      <table class="financials show">
+        <thead>
+          <th class="sticky">Description</th>
+          {% for p in cashflows_periods %}
+            <th class="nowrap">{{ p }}</th>
+          {% endfor %}
+        </thead>
+        <tbody>
+            <tr>
+              <td class="sticky smaller-no-padding">Reported Currency</td>
+              {% for c in cashflows_currencies %}
+                <td class="center-td smaller-no-padding">
+                <img alt="{{ company.country}}" class="flag" src="{{  url_for('static', filename='images/' + c | country + '.png') }}"/></td>
+              {% endfor %}
+            </tr>
+            {% for foo in cashflows_keys %}
+            <tr>
+              <td class="nowrap sticky smaller-no-padding">{{ foo | from_camelcase | title}}</td>
+                {% set rowloop = loop %}
+              {% for x in cashflows_data %}
+                <td class="0">{{ x[rowloop.index0] | thousands }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+   </div>
+    <br/>
+    <br/>
+{% endblock %}
+{% block valuation %}
+<hr/>
+<h4>Discounted Cashflow Estimate Calculator</h4>
+<table class="fixed" id="dcf">
+      <thead>
+        {% for x in range(min_year, max_year, 1) %}
+        <th class="right-td">{{x}}</th>
+        {% endfor %}
+        <th>Terminal Value</th>
+      </thead>
+      <tbody>
+        <tr>
+          {% for x in range(min_year, max_year, 1) %}
+           <td class="year right-td">?</td>
+          {% endfor %}
+          <td id="term" class="right-td">?</td>
+        <tr>
+        <tr>
+          <td>Cashflow</td>
+          <td colspan="2"><input placeholder="or click a value in the table below" type="number" placeholder="enter value" id="cf" class="cashflow"/></td>
+        </tr>
+        <tr>
+          <td>Growth Rate %</td>
+          <td><input type="number" value="5" max="100" placeholder="enter value" id="growth" class="cashflow"/></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Market Cap (USD)</td>
+          <td name="market_cap">{{ company.market_cap | human_format}}</td>
+        </tr>
+          <td>Discount Rate %</td>
+          <td><input type="number" min="1" max="100" value="10" placeholder="enter value" id="discount" class="cashflow"/></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Theoretical Estimate</td>
+          <td id="intrinsic_value"></td>
+        </tr>
+        <tr>
+          <td>Terminal Multiple</td>
+          <td><input type="number" value="15" min="1" placeholder="enter value" id="tm" class="cashflow"/></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>Differential %</td>
+          <td id="change"></td>
+        </tr>
+      </tbody>
+    </table>
+    <p/>
+    <div class="smaller">In millions</div>
+    <table id="myTable">
+      <thead>
+        <th>Period</th>
+        <th>Currency</th>
+        <th>Operating Cashflow</th>
+        <th>Capital Expenditures</th>
+        <th>Free Cashflow*</th>
+        <th>Cash and Cash Equivalents</th>
+      </thead>
+      <tbody>
+        {% for row in fcf %}
+        <tr>
+          <td class="center">{{ row.fiscalDateEnding }}</td>
+          <td class="center">{{ row.currency }}</td>
+          <td class="right-td">{{ row.operatingCashflow | millions}}</td>
+          <td class="right-td">{{ row.capitalExpenditures | millions }}</td>
+          <td class="right-td">{{ row.fcf_using_operating_cashflow | millions }}</td>
+          <td class="right-td">{{ row.cash_and_cash_equivalents | millions}}</td>
+        </tr>
+      </tbody>
+      {% endfor %}
+    </table>
+{% endblock %}

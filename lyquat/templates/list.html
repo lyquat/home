@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}{{ companies[0].industry | title }}{% endblock %}
+{% block head %}
+<script language="javascript" type="text/javascript" src="{{url_for('js_list', industry=industryid )}}"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/modules/draggable-points.js"></script>
+<script src="https://code.highcharts.com/modules/dumbbell.js"></script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', (e) => {
+    	$(function() {
+    	  $("#myTable").tablesorter();
+    	});
+        $('#search').click(function(e){
+            s = $('#symbol').val().toUpperCase();
+            const target = location.protocol + '//' + location.host + '/' + s;
+            window.location.assign(target);
+        });
+        const chart = Highcharts.chart('price_chart', {
+		      exporting: false,
+		      title: false,
+		      chart: {
+		        type: 'line'
+		      },
+		      yAxis: {
+	              title: {
+	                  text: 'Price'
+	              },
+	          },
+		      xAxis: {
+		        type: 'datetime'
+		      },
+		      zoomType: 'xy',
+  		      plotOptions: {
+    			series: {
+            		events: {
+            			click: function(event){
+            				this.setVisible(!this.visible);
+        			    }
+        		    }
+        	    }
+            }
+		    });
+
+		for(var i=0;i<data.length;i++){
+			company_price = data[i];
+			chart.addSeries({
+		        name: company_price.symbol,
+		        data: company_price.prices,
+		        visible: i<20
+		    });
+		}
+    });
+          document.addEventListener("keypress", function onEvent(event) {
+    if (event.key === "Enter") {
+        s = $('#symbol').val().toUpperCase();
+        const target = location.protocol + '//' + location.host + '/' + s;
+        window.location.assign(target);
+    }
+    
+});
+</script>
+{% endblock %}
+{% block content %}
+	<br/>
+	<div>
+		<table id="myTable">
+			<thead>
+				<tr class="center">
+					<th colspan="9" class="smaller">Sector: <a href="{{ url_for('snapshot_by_sector', sectorid=companies[0].sectorid) }}">{{ companies[0].sector | title }}</a></th>
+				</tr>
+				<tr class="center">
+					<th colspan="9">{{ companies[0].industry | title }}</a></th>
+				</tr>
+				<tr>
+				<th>Symbol</th>
+				<th>Name</th>
+				<th>Exchange</th>
+				<th>P/E</th>
+				<th>Price to Book</th>
+				<th>EPS</th>
+				<th>Approx. Market Cap <br/><div class="smaller-text">(millions of USD)</div></th>
+			</tr>
+			</thead>
+			<tbody>
+				{% for company in companies %}
+				<tr>
+				  <td><a href="{{ url_for('symbol', symbol=company.symbol) }}">{{ company.symbol }}</a></td>
+				  <td><a href="{{ url_for('symbol', symbol=company.symbol) }}">{{ company.name }}</a></td>
+				  <td class="center-td">{{ company.exchange }}</td>
+				  <td class="center-td">{{ company.pe }}</td>
+				  <td class="center-td">{{ company.price_to_book }}</td>
+				  <td class="center-td">{{ company.eps }}</td>
+				  <td name="market_cap" class="center-td">{{ company.market_cap | human_format}}</td>
+				 </tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<p/>
+		<br/>
+		<br/>
+	</div>
+	<!--<div id="price_chart"></div>-->
+{%endblock %}

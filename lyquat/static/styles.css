@@ -1,0 +1,464 @@
+.forecast-eps-td {
+  background-color: lightblue;
+}
+
+.last-eps-td {
+  background-color: rgba(243, 184, 177, 0.81);
+}
+
+.vtop {
+  vertical-align: top;
+}
+
+#loader {
+  max-height: 70px;
+}
+
+#search_results {
+  font-size: smaller;
+}
+
+#search_results table {
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  border: none;
+}
+
+.symbol-header {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  background-color: #fff;
+  border: none;
+  height: 50%;
+  border-top: solid;
+}
+
+.symbol-header-img {
+  max-height: 60px;
+}
+
+.order-0 {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.order-1 {
+  font-weight: bold;
+  padding-left: 10px;
+}
+
+.order-2 {
+  padding-left: 20px;
+}
+
+.order-3 {
+  padding-left: 30px;
+}
+
+.logo {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+body{
+  /*font-family: sans-serif;*/
+  font-family: 'Amazon Ember', sans-serif;
+}
+
+.bold {
+  font-weight:  bold;
+}
+
+h4{
+  margin-left: 5%;
+}
+
+.blurb {
+  font-family: 'Noto Serif', serif;
+  font-size: 40px;
+  opacity: 0.5;
+}
+
+.footer {
+  text-align: center;
+  opacity: 0.5;
+  font-size: smaller;
+}
+
+.scroll-container {
+  margin-right: 5%;
+}
+
+.blurb a{
+  text-decoration: none;
+  color: black !important;
+}
+
+.hop{
+  opacity: 0.5;
+}
+
+#floater {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 30%;
+  float: right;
+  height: 100px;
+  width: 100px;
+  padding-right: 1%;
+}
+
+.dates-panel {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-left:  20%;
+  margin-right:  20%;
+}
+
+.like{
+  cursor: pointer;
+  opacity:  0.3;
+  font-size:  xxx-large;
+  text-align: center;
+}
+
+.liked{
+  cursor: pointer;
+  opacity:  1;
+  font-size:  xxx-large;
+  text-align: center;
+}
+
+.financials td {
+  border: 1px solid black;
+}
+
+.shrink {
+  height: 0%;
+  width: 0%;
+}
+
+.header {
+  /*position: fixed;*/
+}
+
+/*.header-pad {
+  width:  40%;
+  float: left;
+}*/
+
+/*thead {
+  position: sticky;
+  top: 0;
+}*/
+
+.flag {
+  height: 50px;
+  width: 50px;
+  opacity: 0.8;
+}
+
+.half{
+  width: 45%;
+  float: left;
+}
+
+thead { 
+   position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1; 
+    background: #fff; 
+}
+/*
+thead tr { 
+   position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1; 
+    background: #fff; 
+}*/
+
+.sticky{
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+    background-color: white;
+}
+
+.fadspace {
+  height: 50px;
+  background-color: red; /* For browsers that do not support gradients */
+  background-image: linear-gradient(red, yellow, green);
+  opacity:  0.3;
+}
+
+.right {
+  float: right;
+  margin-right: 20px;
+}
+
+.right-td {
+  text-align: right;
+}
+
+.center-td {
+  text-align: center;
+}
+
+.left {
+  float: left;
+  margin-left: 20px;
+}
+
+#frames {
+  width: 80%;
+  margin: auto;
+  float: left;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display:  flex;
+  max-height: 800px;
+}
+
+.loading {
+  /*background-image: url("/static/oak-tree-icon-18.jpeg") repeat 0 0 !important;
+  /*background-image: url("http://localhost:5000/static/Loading_2.gif") repeat 0 0;*/
+  /*background-image: url("https://cdn.sstatic.net/Img/unified/sprites.svg?v=fcc0ea44ba27");*/
+  /*background-color: #cccccc;*/
+}
+
+.icon {
+  /*position: fixed;*/
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 15%;
+  height: 15%;
+}
+
+.panel_container {
+  display: flex;
+}
+
+.right-scroll {
+  overflow: auto;
+  float:  right;
+  max-height: 800px;
+  padding-right: 10%;
+  padding-top: 50px;
+}
+
+.panel {
+  flex: 1;
+  margin:  0 1%;
+  border-radius:  10px;
+  border:  1px solid;
+  padding: 10px;
+  /*font-family: Arial;*/
+}
+
+.center {
+  text-align: center;
+}
+
+.left{
+  float: left;
+}
+
+.hide {
+  visibility: hidden;
+  width: 0px;
+  height: 0px;
+}
+
+.show {
+  visibility: visible;
+}
+
+#results{
+  font-size:  smaller;
+}
+
+.smaller-text {
+  font-size:  smaller;
+}
+
+.smaller {
+  font-size:  smaller;
+  padding-left: 5%;
+}
+
+.smaller-no-padding {
+  font-size:  smaller;
+}
+
+.dcf {
+  /*font-size:  smaller;*/
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 30px;
+  padding: .5em;
+  background: #efefef;
+  border: 3px solid #333;
+}
+
+input {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 20%;
+}
+
+.no-underline a {
+  text-decoration: none;
+}
+
+table {
+  /*display: block;*/
+  margin-left: auto;
+  margin-right: auto;
+  width: 90%;
+  border: 1px solid black;
+  /*overflow: scroll;*/
+  margin-left: 5%;
+}
+
+.scrollable {
+  overflow-x: scroll;
+}
+
+table.fixed{
+  table-layout : fixed;
+}
+
+tr {
+  border-bottom: 1px solid #ddd;
+}
+
+tr:hover {background-color: lightgrey;}
+
+th {
+  border-bottom-style:  inset;
+}
+
+th, td {
+  padding: 5px;
+  /*width:  15%;*/
+}
+
+.nowrap{
+  white-space: nowrap;
+}
+
+.column{
+    display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /*width: 50%;*/
+  border-bottom: 1px;
+}
+
+td[name="market_cap"]{
+  text-align: right;
+}
+
+td[name="change_pct"]{
+  text-align: right;
+}
+
+
+iframe {
+  width: 90%;
+  height: 450px;
+/*  flex: 1 1 auto;
+  display: flex; */
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
+  border: none;
+}
+
+#banner {
+  height: 20%;
+  border: 0;
+}
+
+#sector_panels {
+  display: flex;
+  justify-content: space-between;
+  /*padding: 0 1%;*/
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-bottom: 30px;
+}
+
+/* Unvisited link  */
+/* Visited link    */
+/* Selected link   */
+/* see https://stackoverflow.com/a/7291903/849761 */
+
+/*a {color:#0693e3;}         */
+/*a:visited {color:#8ed1fc;} */
+/*a:active {color:#8ed1fc;}  */
+
+a:visited { color: LinkText; }
+
+a {
+  text-align:center;
+}
+
+.green {
+  background-color:  lightgreen;
+}
+
+.red {
+  background-color:  salmon;
+}
+
+.salmon-{
+  background-color:  lightsalmon;
+}
+
+#chart {
+  width: 50%;
+  height: 500px;
+}
+
+.cashflow {
+  width: 200px;
+}
+
+.stats {
+  width: 80%;
+  border: 0;
+}
+
+#queries {
+  margin-top: 50px;
+}
+
+.graphics {
+  display: flex;
+  width: 90%;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+

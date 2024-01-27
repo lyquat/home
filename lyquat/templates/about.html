@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ "About" }}{% endblock %}
+{% block content %}
+	<div class="center fiftycent">
+		<h2>Disclaimer</h2>
+		<br/>
+		This website/service is for <b><u>informational</u></b> purposes only<p/>
+		It <b><u>does not</u></b> consitute financial or investement advice, <br/>and assumes no responsibility for investment decisions<p/>
+		It <b><u>cannot</u></b> and <b><u>does not</u></b> guarantee the completeness, <br/> integrity or quality of any data presented on this website
+		<h2>Data Sources</h2>
+		This website uses data provided by <a href="https://www.alphavantage.co/" target="_blank">Alphavantage</a> <br/>
+		<h2>Privacy</h2>
+		This website/service currently uses <a href="https://en.wikipedia.org/wiki/Google_Analytics" target="_blank">Google Analytics</a> to record statistics about user traffic<p/>
+		We recommend using a search engine like <a href="https://duckduckgo.com/" target="_blank">DuckduckGo</a> <br/>or installing an Adblocker if you prefer to opt out<p/>
+		This website <u><b>does not</b></u> create or collect cookies, but externally sourced <br/>software libraries may create browser cookies for their own purposes
+		<h2>Technical Attributions</h2>
+		Charts by <a href="https://www.highcharts.com/" target="_blank">Highcharts</a><br/>
+		Flag icons by <a href="https://www.flaticon.com/free-icons/flag" target="_blank">Flaticon</a><br/>
+		Table sorter by <a href="https://mottie.github.io/tablesorter/docs/" target="_blank">tablesorter</a><br/>
+		Javascript Library: <a href="https://jquery.com/" target="_blank">jQuery</a><br/>
+		Logo generated with <a href="https://www.freelogodesign.org/" target="">FreeLogo Design</a><br/>
+		Data provided by <a href="https://www.alphavantage.co/" target="_blank">Alphavantage</a> 
+		<br/>
+		<br/>
+		<hr/>
+		<h2>FAQ:</h2>
+		<b>How often is the data on this website updated?</b><br/>
+		Data is refreshed on a best effort basis, depending on whether and when our data sources make their data available<p/>
+		<b>Why is the ticker I'm searching for not here?</b><br/>
+		We currently only list tickers provided by <a href="https://www.alphavantage.co/" target="_blank">Alphavantage</a><p/>
+		Also, Lyquat deliberately excludes tickers described as "blank checks", "warrants", "acquisition"/"acquisition corp"/"debentures", <br/>and other similar instruments, that it does not deem relevant to its users<p/>	
+		<b>What does "price" mean?</b><br/>
+		We refer to the "adjusted close" (as opposed to "close") fields from our data sources. <a href="https://www.investopedia.com/terms/a/adjusted_closing_price.asp#:~:text=Key%20Takeaways-,The%20adjusted%20closing%20price%20amends%20a%20stock's%20closing%20price%20to,price%20before%20the%20market%20closes." target="_blank"><br/>Further info here</a></p>
+	</div>
+{% endblock %}

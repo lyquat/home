@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}{{ "Calendar" }}{% endblock %}
+{% block head %}{% endblock %}
+{% block content %}
+	<div>
+		<table>
+			<thead>
+				<tr>
+				</tr>
+			</thead>
+			{% for k in data %}
+			<tbody>
+				<tr class="sticky">
+					<td colspan="{{ sectors | length }}" class="center-td bold">Week beginning {{ k | date_string }}</td>
+				</tr>
+				<tr>
+					<td class="last-eps-td">Last EPS</td>
+				</tr>
+				<tr>
+					<td class="forecast-eps-td">Forecast EPS</td>
+				</tr>
+				<tr>
+					<td class="vtop">
+						<table>
+							<tr><td class="center-td bold" colspan="4">Monday</td></tr>
+						{# Monday #}
+						{% for x in data[k] if x.report_date_iso == 1 %}
+								<tr>
+									<td><a target="_blank" href="{{ url_for('symbol', symbol=x.symbol) }}">{{ x.symbol }}</a></td>
+									<td class="last-eps-td ">{{ x.last_eps }}</td>
+									<td class="forecast-eps-td">{{ x.estimate }}</td>
+									<td class="{{ x.last_eps | changepct(x.estimate) | color }}">{{ x.last_eps | changepct(x.estimate) | format_2dp }}%</td>
+								</tr>
+						{% endfor %}
+						</table>
+					</td>
+					<td class="vtop">
+						<table>
+							<tr><td class="center-td bold" colspan="4">Tuesday</td></tr>
+
+						{# Tuesday #}
+						{% for x in data[k] if x.report_date_iso == 2 %}
+								<tr>
+									<td><a target="_blank" href="{{ url_for('symbol', symbol=x.symbol) }}">{{ x.symbol }}</a></td>
+									<td class="last-eps-td ">{{ x.last_eps }}</td>
+									<td class="forecast-eps-td">{{ x.estimate }}</td>
+									<td class="{{ x.last_eps | changepct(x.estimate) | color }}">{{ x.last_eps | changepct(x.estimate) | format_2dp }}%</td>
+								</tr>
+						{% endfor %}
+						</table>
+					</td>
+					<td class="vtop">
+						<table>
+							<tr><td class="center-td bold" colspan="4">Wednesday</td></tr>
+						{# Wednesday #}
+						{% for x in data[k] if x.report_date_iso == 3 %}
+								<tr>
+									<td><a target="_blank" href="{{ url_for('symbol', symbol=x.symbol) }}">{{ x.symbol }}</a></td>
+									<td class="last-eps-td ">{{ x.last_eps }}</td>
+									<td class="forecast-eps-td">{{ x.estimate }}</td>
+									<td class="{{ x.last_eps | changepct(x.estimate) | color }}">{{ x.last_eps | changepct(x.estimate) | format_2dp }}%</td>
+								</tr>
+						{% endfor %}
+						</table>
+					</td>
+					<td class="vtop">
+						<table>
+							<tr><td class="center-td bold" colspan="4">Thursday</td></tr>
+						{# Thursday #}
+						{% for x in data[k] if x.report_date_iso == 4 %}
+								<tr>
+									<td><a target="_blank" href="{{ url_for('symbol', symbol=x.symbol) }}">{{ x.symbol }}</a></td>
+									<td class="last-eps-td ">{{ x.last_eps }}</td>
+									<td class="forecast-eps-td">{{ x.estimate }}</td>
+									<td class="{{ x.last_eps | changepct(x.estimate) | color }}">{{ x.last_eps | changepct(x.estimate) | format_2dp }}%</td>
+								</tr>
+						{% endfor %}
+						</table>
+					</td>
+					<td class="vtop">
+						<table>
+							<tr><td class="center-td bold" colspan="4">Friday</td></tr>
+						{# Friday #}
+						{% for x in data[k] if x.report_date_iso == 5 %}
+								<tr>
+									<td><a target="_blank" href="{{ url_for('symbol', symbol=x.symbol) }}">{{ x.symbol }}</a></td>
+									<td class="last-eps-td ">{{ x.last_eps }}</td>
+									<td class="forecast-eps-td">{{ x.estimate }}</td>
+									<td class="{{ x.last_eps | changepct(x.estimate) | color }}">{{ x.last_eps | changepct(x.estimate) | format_2dp }}%</td>
+								</tr>
+						{% endfor %}
+						</table>
+					</td>
+				</tr>
+			</tbody>
+			{% endfor %}
+		</table>
+	</div>
+{%endblock %}

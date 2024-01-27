@@ -1,0 +1,7 @@
+# tree icon from https://icon-library.com/icon/oak-tree-icon-18.html
+
+# loading icon from https://upload.wikimedia.org/wikipedia/commons/c/c7/Loading_2.gif
+
+# Need to attribute flag icons with <a href="https://www.flaticon.com/free-icons/flag" title="flag icons">Flag icons created by Freepik - Flaticon</a>
+
+

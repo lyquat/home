@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{{ "Lyquat" }}{% endblock %}
+{% block head %}
+<script type="text/javascript">
+
+    function filterOption(e){
+    	var url = e.value;
+    	window.location.href = url;
+    
+        
+    }
+   document.addEventListener('DOMContentLoaded', (e) => {
+       
+       $(function() {
+	        $("#myTable").tablesorter();
+	    });
+	    $('#search').click(function(e){
+            s = $('#symbol').val().toUpperCase();
+            const target = location.protocol + '//' + location.host + '/' + s;
+            window.location.assign(target);
+        });
+   });
+      document.addEventListener("keypress", function onEvent(event) {
+    if (event.key === "Enter") {
+        s = $('#symbol').val().toUpperCase();
+        const target = location.protocol + '//' + location.host + '/' + s;
+        window.location.assign(target);
+    }
+});
+	</script>
+{% endblock %}
+{% block content %}
+	<div>
+		<table id="myTable">
+			<thead>
+				<th>
+					<select onchange="filterOption(this)">
+						<option>Sector...</option>
+						{% for s in sectors %}
+							<option value="{{ url_for('snapshot_by_sector', sectorid= s.sectorid) }}">{{ s.sector }}</option>
+						{% endfor %}
+					</select>
+				</th>
+				<th>Industry</th>
+				<th>Count</th>
+				<th>Smallest Cap<div class="smaller-text">(millions of USD)</div></th>
+				<th>Largest Cap<div class="smaller-text">(millions of USD)</div></th>
+				<th>Combined Cap<br/><div class="smaller-text">(millions of USD)</div></th>
+			</thead>
+			<tbody>
+				{% for row in rows %}
+				<tr>
+				  <td>{{ row.sector | title }}</td>
+				  <td><a href="{{ url_for('list_industry', industry=row.industry_id)}}">{{ row.industry | title }}</a></td>
+				  <td class="center-td">{{ row.count }}</td>
+				  <td class="right-td">{{ row.min | human_format}}</td>
+				  <td class="right-td">{{ row.max | human_format}}</td>
+				  <td class="right-td">{{ row.market_cap | human_format }}</td>
+				 </tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+{%endblock %}

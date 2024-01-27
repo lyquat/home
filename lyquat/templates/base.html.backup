@@ -1,0 +1,45 @@
+<!doctype html>
+	<head>
+		<title>{% block title %}{% endblock %}</title>
+		<link rel="stylesheet" href="{{url_for('static', filename='styles.css') }}">
+		<link href="http://fonts.cdnfonts.com/css/amazon-ember" rel="stylesheet">
+	  	<link rel="icon" type="image/x-icon" href="{{url_for('static', filename='favicon.ico') }}">
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-GXNZMDLJ0Q"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', 'G-GXNZMDLJ0Q');
+		</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+		<script language="javascript" type="text/javascript" src="{{url_for('static', filename='script.js')}}"></script>
+		{% block head %}{% endblock %}
+	</head>
+	<body>
+		<div id="masthead">
+			<a href="{{ url_for('index') }}"><img class="icon" src="{{url_for('static', filename='logo3.png')}}"></img></a>
+			<input type="text" id="symbol" placeholder="Enter symbol and hit search" maxlength="10"/><br/>
+			<input type="button" name="search" id="search" value="Search"/><br/>
+		</div>
+		{% block content %}{% endblock %}
+		{% block graphics %}{% endblock %}
+		{% block balance_sheet %}{% endblock %}
+		{% block income_statement %}{% endblock %}
+		{% block cashflows %}{% endblock %}
+		{% block valuation %}{% endblock %}
+		{% block overview %}{% endblock %}
+		<br/>
+		{% block footer %}
+			<div class="footer">
+				<a href="{{url_for('query')}}">Query</a><p/>
+				<a href="{{url_for('about')}}">About</a><p/>
+				<a href="https://clearbit.com">Logos provided by Clearbit</a>
+			</div>
+			<p/>
+			<p/>
+		{% endblock %}
+	</body>
+</html>

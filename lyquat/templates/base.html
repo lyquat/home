@@ -1,0 +1,92 @@
+<!doctype html>
+	<head>
+		<title>{% block title %}{% endblock %}</title>
+		<link rel="stylesheet" href="{{url_for('static', filename='styles.css') }}">
+		<link href="http://fonts.cdnfonts.com/css/amazon-ember" rel="stylesheet">
+	  	<link rel="icon" type="image/x-icon" href="{{url_for('static', filename='favicon.ico') }}">
+	    <link rel="apple-touch-icon" href="{{ url_for('static', filename='logo3.png') }}">
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-GXNZMDLJ0Q"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+		  gtag('config', 'G-GXNZMDLJ0Q');
+		</script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js"></script>
+		<script language="javascript" type="text/javascript" src="{{url_for('static', filename='script.js')}}"></script>
+		<script type="text/javascript">
+		    var loader = "{{ url_for('static',filename='circles-menu-1.gif')}}";
+			$(document).ready(function() {
+	            $("#symbol").keyup(function() {
+	            	var res = $("#search_results table");
+	            	var q = this.value;
+	            	if(q === ''){
+	            		res.empty();
+	            		return;
+	            	}
+	            	res.empty();
+					res.append("<tr class='center'><td><img id='loader' src=" + loader + "/></td></tr>");
+	            	fetch("https://lyquat.com/query/search?" + new URLSearchParams({
+	            		q: q
+	            	}))
+	            	.then((response) => response.json())
+					.then((data) => {
+  						res.empty();
+  						res.append("<tr>");
+						res.append("<th>Symbol</th><th>Name</th>");
+  						res.append("<tr/>");
+  						if(data.length == 0){
+  							res.append("<tr>");
+  							res.append("<td>No results found</td>");
+  							res.append("</tr>");
+  							return;
+  						}
+  						for(var i=0;i<data.length;i++){
+  							res.append("<tr>");
+  							res.append("<td>" + "<a href=" + data[i].url + ">" + data[i].symbol + "</a>" + "</td>");
+  							res.append("<td>" + "<a href=" + data[i].url + ">" + data[i].name + "</a>" + "</td>");
+  							res.append("<tr/>");
+  						}
+						})
+					  .catch((error) => {
+					    console.error("Error:", error);
+					  });
+                })
+           	});
+		</script>
+		{% block head %}{% endblock %}
+	</head>
+	<body>
+		<p/>
+		<p/>
+		<div id="masthead">
+			<a href="{{ url_for('index') }}"><img class="icon" src="{{url_for('static', filename='logo3.png')}}"></img></a>
+			<input type="text" id="symbol" placeholder="Enter symbol or company name" maxlength="10"/><br/>
+		</div>
+		<div id="search_results">
+			<table>
+			</table>
+		</div>
+		<p/>
+		{% block content %}{% endblock %}
+		{% block graphics %}{% endblock %}
+		{% block balance_sheet %}{% endblock %}
+		{% block income_statement %}{% endblock %}
+		{% block cashflows %}{% endblock %}
+		{% block valuation %}{% endblock %}
+		{% block overview %}{% endblock %}
+		<br/>
+		{% block footer %}
+			<div class="footer">
+			    <a href="{{url_for('calendar')}}">Earnings Calendar</a><p/>
+				<a href="{{url_for('query')}}">Query</a><p/>
+				<a href="{{url_for('about')}}">About</a><p/>
+				<a href="https://clearbit.com">Logos provided by Clearbit</a>
+			</div>
+			<p/>
+			<p/>
+		{% endblock %}
+	</body>
+</html>
